@@ -1,4 +1,6 @@
 using ExampleWebAPIApplication.Swagger;
+using ExampleWebAPISApplication.Libraries;
+using ExampleWebAPISApplication.Libraries.Interfaces;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -45,6 +47,10 @@ namespace ExampleWebAPIApplication
                 o.IncludeXmlComments(System.IO.Path.Combine(System.AppContext.BaseDirectory, "ExampleWebAPIApplication.Comments.xml"));
             });
 
+            services.AddSingleton<IMyCache>(_ => {
+                MyCache.InitializeConnectionString(Configuration["CacheConnectionString"]);
+                return new MyCache();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

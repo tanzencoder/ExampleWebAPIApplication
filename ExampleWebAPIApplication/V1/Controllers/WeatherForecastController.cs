@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExampleWebAPISApplication.Libraries.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,18 @@ namespace ExampleWebAPIApplication.V1.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IMyCache cache;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMyCache cache)
         {
             _logger = logger;
+            this.cache = cache;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async System.Threading.Tasks.Task<IEnumerable<WeatherForecast>> GetAsync()
         {
+            await cache.SetString("Weather", "Bad Weather");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
