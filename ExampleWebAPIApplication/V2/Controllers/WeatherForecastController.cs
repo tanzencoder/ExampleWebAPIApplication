@@ -3,6 +3,7 @@ using ExampleWebAPIApplication.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ExampleWebAPIApplication.V2.Controllers
 {
@@ -12,17 +13,18 @@ namespace ExampleWebAPIApplication.V2.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherService weatherService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, WeatherService weatherService)
         {
             _logger = logger;
+            this.weatherService = weatherService;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
-            var weatherService = new WeatherService();
-            return weatherService.GetCurrentWeather();
+            return await weatherService.GetCurrentWeatherAsync();
         }
     }
 }

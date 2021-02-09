@@ -1,7 +1,9 @@
 ﻿using ExampleWebAPIApplication.Logic.Models;
+using ExampleWebAPISApplication.Libraries.DataStore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExampleWebAPIApplication.Logic
 {
@@ -11,9 +13,16 @@ namespace ExampleWebAPIApplication.Logic
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+        private readonly IMyDataStore dataStore;
 
-        public IEnumerable<WeatherForecast> GetCurrentWeather()
+        public WeatherService(IMyDataStore dataStore)
         {
+            this.dataStore = dataStore;
+        }
+
+        public async Task<IEnumerable<WeatherForecast>> GetCurrentWeatherAsync()
+        {
+            await dataStore.GetCurrentWeatherAsync();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

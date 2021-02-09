@@ -1,5 +1,7 @@
+using ExampleWebAPIApplication.Logic;
 using ExampleWebAPIApplication.Swagger;
 using ExampleWebAPISApplication.Libraries.Cache;
+using ExampleWebAPISApplication.Libraries.DataStore;
 using ExampleWebAPISApplication.Libraries.Telemetry;
 using HealthChecks.UI.Client;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -55,6 +57,12 @@ namespace ExampleWebAPIApplication
                 MyCache.InitializeConnectionString(Configuration["CacheConnectionString"]);
                 return new MyCache();
             });
+
+            services.AddSingleton<IMyDataStore>(_ => {
+                return new MyDataStore(Configuration["CosmosEndpointURL"], Configuration["CosmosKey"]);
+            });
+
+            services.AddScoped<WeatherService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

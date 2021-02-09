@@ -14,17 +14,18 @@ namespace ExampleWebAPIApplication.V1.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherService weatherService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, WeatherService weatherService)
         {
             _logger = logger;
+            this.weatherService = weatherService;
         }
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
-            var weatherService = new WeatherService();
-            return weatherService.GetCurrentWeather();
+            return await weatherService.GetCurrentWeatherAsync();
         }
     }
 }
