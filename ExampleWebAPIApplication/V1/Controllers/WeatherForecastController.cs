@@ -1,9 +1,10 @@
-﻿using ExampleWebAPISApplication.Libraries.Interfaces;
+﻿using ExampleWebAPIApplication.Logic;
+using ExampleWebAPIApplication.Logic.Models;
+using ExampleWebAPISApplication.Libraries.Cache;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace ExampleWebAPIApplication.V1.Controllers
 {
@@ -12,32 +13,18 @@ namespace ExampleWebAPIApplication.V1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IMyCache cache;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IMyCache cache)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-            this.cache = cache;
         }
 
         [HttpGet]
-        public async System.Threading.Tasks.Task<IEnumerable<WeatherForecast>> GetAsync()
+        public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
-            await cache.SetString("Weather", "Bad Weather");
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var weatherService = new WeatherService();
+            return weatherService.GetCurrentWeather();
         }
     }
 }

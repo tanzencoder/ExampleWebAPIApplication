@@ -1,6 +1,8 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ExampleWebAPIApplication
+namespace ExampleWebAPIApplication.Logic.Models
 {
     public class WeatherForecast
     {

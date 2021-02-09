@@ -1,9 +1,8 @@
-﻿using ExampleWebAPISApplication.Libraries.Interfaces;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;
 
-namespace ExampleWebAPISApplication.Libraries
+namespace ExampleWebAPISApplication.Libraries.Cache
 {
     public class MyCache : IMyCache
     {

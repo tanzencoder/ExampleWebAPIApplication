@@ -1,6 +1,5 @@
 using ExampleWebAPIApplication.Swagger;
-using ExampleWebAPISApplication.Libraries;
-using ExampleWebAPISApplication.Libraries.Interfaces;
+using ExampleWebAPISApplication.Libraries.Cache;
 using ExampleWebAPISApplication.Libraries.Telemetry;
 using HealthChecks.UI.Client;
 using Microsoft.ApplicationInsights.Extensibility;
