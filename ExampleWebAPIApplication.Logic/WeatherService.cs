@@ -22,7 +22,7 @@ namespace ExampleWebAPIApplication.Logic
 
         public async Task<IEnumerable<WeatherForecast>> GetCurrentWeatherAsync()
         {
-            await dataStore.GetCurrentWeatherAsync();
+            //await dataStore.GetCurrentWeatherAsync();
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
