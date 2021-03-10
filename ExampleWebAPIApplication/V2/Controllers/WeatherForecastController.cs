@@ -24,6 +24,8 @@ namespace ExampleWebAPIApplication.V2.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
+            var currentCity = "San Bernardino";
+            _logger.LogInformation("Getting current weather for {currentCity}", currentCity);
             return await weatherService.GetCurrentWeatherAsync();
         }
     }
