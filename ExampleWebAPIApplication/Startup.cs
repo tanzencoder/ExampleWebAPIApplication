@@ -15,6 +15,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.IO;
 using System.Reflection;
@@ -33,8 +34,8 @@ namespace ExampleWebAPIApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<ITelemetryInitializer>(_ => new MyTelemetryInitializer("ExampleWebAPI", Configuration["ApplicationInsightsKey"]) );
-            //services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsightsKey"]);
+            services.AddSingleton<ITelemetryInitializer>(_ => new MyTelemetryInitializer("ExampleWebAPI", Configuration["ApplicationInsightsKey"]));
+            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsightsKey"]);
 
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy());
@@ -83,6 +84,8 @@ namespace ExampleWebAPIApplication
                     }
                 });
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 

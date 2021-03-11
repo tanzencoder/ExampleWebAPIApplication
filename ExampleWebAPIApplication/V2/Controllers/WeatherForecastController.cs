@@ -26,7 +26,7 @@ namespace ExampleWebAPIApplication.V2.Controllers
         {
             var currentCity = "San Bernardino";
             _logger.LogInformation("Getting current weather for {currentCity}", currentCity);
-            return await weatherService.GetCurrentWeatherAsync();
+            return weatherService.GetCurrentWeather();
         }
     }
 }

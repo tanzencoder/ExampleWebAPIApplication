@@ -27,7 +27,7 @@ namespace ExampleWebAPIApplication.V1.Controllers
         {
             var currentCity = "Albuquerque";
             _logger.LogInformation("Getting current weather for {currentCity}", currentCity);
-            return await weatherService.GetCurrentWeatherAsync();
+            return weatherService.GetCurrentWeather();
         }
     }
 }

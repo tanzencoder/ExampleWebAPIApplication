@@ -20,7 +20,7 @@ namespace ExampleWebAPIApplication.Logic
             this.dataStore = dataStore;
         }
 
-        public async Task<IEnumerable<WeatherForecast>> GetCurrentWeatherAsync()
+        public IEnumerable<WeatherForecast> GetCurrentWeather()
         {
             //await dataStore.GetCurrentWeatherAsync();
             var rng = new Random();
