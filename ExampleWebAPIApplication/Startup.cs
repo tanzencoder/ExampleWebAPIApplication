@@ -5,6 +5,7 @@ using ExampleWebAPISApplication.Libraries.DataStore;
 using ExampleWebAPISApplication.Libraries.Telemetry;
 using HealthChecks.UI.Client;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -34,8 +35,28 @@ namespace ExampleWebAPIApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ITelemetryInitializer>(_ => new MyTelemetryInitializer("ExampleWebAPI", Configuration["ApplicationInsightsKey"]));
-            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsightsKey"]);
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:8080")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+            });
+
+            var domain = $"https://{Configuration["Auth0:Domain"]}/";
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                   .AddJwtBearer(options =>
+                   {
+                       options.Authority = domain;
+                       options.Audience = Configuration["Auth0:Audience"];
+                   });
+
+            //services.AddSingleton<ITelemetryInitializer>(_ => new MyTelemetryInitializer("ExampleWebAPI", Configuration["ApplicationInsightsKey"]));
+            //services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsightsKey"]);
 
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy());
@@ -87,10 +108,13 @@ namespace ExampleWebAPIApplication
 
             app.UseSerilogRequestLogging();
 
+            app.UseCors("AllowSpecificOrigin");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Configure health check

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Json;
 using System;
 using System.IO;
 
@@ -42,6 +43,7 @@ namespace ExampleWebAPIApplication
                     .ReadFrom.Services(services)
                     .Enrich.FromLogContext()
                     .WriteTo.Console()
+                    //.WriteTo.File(new JsonFormatter(renderMessage:  true), "log.json")
                     //.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault().InstrumentationKey = context.Configuration["ApplicationInsightsKey"], TelemetryConverter.Events)
                     //.WriteTo.DatadogLogs(context.Configuration["DatadogAPIKey"])
                 )

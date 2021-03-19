@@ -1,13 +1,15 @@
 ﻿using ExampleWebAPIApplication.Logic;
 using ExampleWebAPIApplication.Logic.Models;
+using ExampleWebAPISApplication.Libraries.Cache;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ExampleWebAPIApplication.V2.Controllers
+namespace ExampleWebAPIApplication.Weather.V1.Controllers
 {
-    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -24,7 +26,7 @@ namespace ExampleWebAPIApplication.V2.Controllers
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
-            var currentCity = "San Bernardino";
+            var currentCity = "Albuquerque";
             _logger.LogInformation("Getting current weather for {currentCity}", currentCity);
             return weatherService.GetCurrentWeather();
         }
