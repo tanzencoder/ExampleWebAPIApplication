@@ -1,9 +1,9 @@
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Compact;
 using System;
 using System.IO;
 
@@ -14,9 +14,9 @@ namespace ExampleWebAPIApplication
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+               .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
+                .WriteTo.Console(new CompactJsonFormatter())
                 .CreateBootstrapLogger();
             try
             {
@@ -39,12 +39,7 @@ namespace ExampleWebAPIApplication
             Host.CreateDefaultBuilder(args)
                 .UseSerilog((context, services, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration)
-                    .ReadFrom.Services(services)
-                    .Enrich.FromLogContext()
-                    .WriteTo.Console()
-                    //.WriteTo.ApplicationInsights(TelemetryConfiguration.CreateDefault().InstrumentationKey = context.Configuration["ApplicationInsightsKey"], TelemetryConverter.Events)
-                    //.WriteTo.DatadogLogs(context.Configuration["DatadogAPIKey"])
-                )
+                 )
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "mnt/secrets-store");

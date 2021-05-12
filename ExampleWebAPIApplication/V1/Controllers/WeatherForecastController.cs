@@ -26,8 +26,14 @@ namespace ExampleWebAPIApplication.V1.Controllers
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
             var currentCity = "Albuquerque";
-            _logger.LogInformation("Getting current weather for {currentCity}", currentCity);
-            return weatherService.GetCurrentWeather();
+            var forecast = weatherService.GetCurrentWeather();
+            var currentCityDict = new Dictionary<string, string>() { { "City", currentCity }, { "State", "NM" } };
+
+            _logger.LogInformation("Example logging simple property: {currentCity}", currentCity);
+            _logger.LogInformation("Example logging complex property: {@currentCityObject}", new { City = currentCity, State = "NM", Forecast = forecast });
+            _logger.LogInformation("Example logging Dictionary: {@currentCityDict}", currentCityDict);
+            _logger.LogInformation("Example logging complex object w dictionary: {@currentCityObject}", new { City = currentCity, State = "NM", Forecast = forecast, CityState = currentCityDict });
+            return forecast;
         }
     }
 }
