@@ -2,9 +2,7 @@ using ExampleWebAPIApplication.Logic;
 using ExampleWebAPIApplication.Swagger;
 using ExampleWebAPISApplication.Libraries.Cache;
 using ExampleWebAPISApplication.Libraries.DataStore;
-using ExampleWebAPISApplication.Libraries.Telemetry;
 using HealthChecks.UI.Client;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -34,9 +32,6 @@ namespace ExampleWebAPIApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ITelemetryInitializer>(_ => new MyTelemetryInitializer("ExampleWebAPI", Configuration["ApplicationInsightsKey"]));
-            services.AddApplicationInsightsTelemetry(Configuration["ApplicationInsightsKey"]);
-
             services.AddHealthChecks()
                 .AddCheck("self", () => HealthCheckResult.Healthy());
 
@@ -68,6 +63,8 @@ namespace ExampleWebAPIApplication
             });
 
             services.AddScoped<WeatherService>();
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
